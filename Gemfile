@@ -53,7 +53,11 @@ group :development do
   gem 'pry'
   gem 'pry-nav'
 
-  gem "capistrano"
+  gem 'capistrano', '~> 3.5.0' 
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rvm'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -60,6 +60,6 @@
 #     # password: "please use keys"
 #   }
 
-server '18.188.186.148', user: 'ubuntu', roles: %w{app web db} # production server
+server '18.191.185.26', user: 'ubuntu', roles: %w{app web db} # production server
 set :rails_env, :production
 set :branch , "master"
