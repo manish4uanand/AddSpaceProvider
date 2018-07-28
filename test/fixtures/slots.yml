@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_time: 2018-07-26 20:21:45
+  end_time: 2018-07-26 20:21:45
+  created_by: 1
+  booked_by: 1
+
+two:
+  start_time: 2018-07-26 20:21:45
+  end_time: 2018-07-26 20:21:45
+  created_by: 1
+  booked_by: 1

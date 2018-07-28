@@ -1,0 +1,15 @@
+<h1 class="alert alert-info">Slot #<%= @slot.id %></h1>
+<p>
+  <strong>Start time:</strong>
+  <%= @slot.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @slot.end_time %>
+</p>
+
+<% if current_user.role == 0 %>
+	<%= link_to 'Edit', edit_slot_path(@slot) %> |
+<% end %>
+<%= link_to 'Back', slots_path %>

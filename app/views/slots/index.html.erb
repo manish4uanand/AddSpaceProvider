@@ -1,0 +1,112 @@
+<h1 class="alert alert-info">Slots Listing</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Start time</th>
+      <th>End time</th>
+      <% if current_user.role != 0 %>
+        <th>Created by</th>
+        <th>Booked by</th>
+      <% end %>
+
+      <th colspan="3">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @slots.each do |slot| %>
+      <tr>
+        <td><%= slot.start_time %></td>
+        <td><%= slot.end_time %></td>
+        <% if current_user.role != 0 %>
+          <td><%= User.find(slot.created_by).name ? User.find(slot.created_by).name : "N/A"   %></td>
+          <td>
+            <% if slot.booked_by.present? %>
+              <%= User.find(slot.booked_by).name ? User.find(slot.booked_by).name : "N/A" %>
+            <% else %>
+              N/A
+            <% end %>
+            </td>
+        <% end %>
+        <% if current_user.role == 0 %>
+          <td><%= link_to '<span class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> Show</span>'.html_safe, slot %></td>
+          <td><%= link_to '<span class="btn btn-default"><i class="glyphicon glyphicon-edit"></i> Edit</span>'.html_safe, edit_slot_path(slot) %></td>
+          <td><%= link_to '<span class="btn btn-default"><i class="glyphicon glyphicon-remove-circle"></i> Destroy</span>'.html_safe, slot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <% if slot.status == "Booked" %>
+            <td><%= link_to 'Booked', "", class: "btn btn-sm btn-warning", disabled: true %>
+
+              <% if User.find(slot.booked_by).role == 2 %>
+                <% bidder_array = slot.bids.map{|s| s.bidder } %>
+                <% if bidder_array.include? current_user.id %>
+                  <%= link_to '<span class="">Already Bid</span>'.html_safe, "", class: "btn btn-sm btn-info", disabled: true  %>
+                <% else %>
+                  <% if current_user.role == 1 %>
+                    <%= link_to '<span class="btn btn-sm btn-success">Bid</span>'.html_safe, new_slot_bid_path(slot) %> 
+                  <% end %>
+                <% end %>
+              <% end %>
+              <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target=".view_bid_details<%= slot.id %>">See Bid Details                    
+
+            </td>
+          <% else %>
+            <% if slot.start_time.to_date < Date.today %>
+              <td><%=  link_to '<i class="glyphicon glyphicon-remove"></i> Expired</span>'.html_safe, "",  class: "btn btn-danger btn-sm", :disabled => true %></td>
+            <% else %>
+              <td><%= link_to '<span class="btn btn-sm btn-success"><i class="glyphicon glyphicon-ok"></i> Book Space</span>'.html_safe, slots_book_slot_path(slot) %></td>
+            <% end%>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if current_user.role == 0 %>
+<%= link_to '<span class="btn btn-success"><i class="glyphicon glyphicon-plus-sign"></i> New Slot</span>'.html_safe, new_slot_path %>
+<% end %>
+
+
+<% if @slots.present? %>
+  <% @slots.each do |slot| %>
+  <div class="modal fade view_bid_details<%= slot.id %>" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content poPupbc">
+        <div class="modal-header">
+          <button type="button" class="close clStyjd" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title Textwh">Bid Details</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Bidder Name</th>
+                <th>Bidder Mobile</th>
+                <th>Bidder Address</th>
+                <th>Bid Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if slot.bids.any? %>
+                <% slot.bids.each do |bid| %>
+                  <tr>
+                    <% user = User.find(bid.bidder) %>
+                    <td><%= user.name if bid.bidder.present? %></td>
+                    <td><%= user.mobile %></td>
+                    <td><%= user.address %></td>
+                    <td><%= bid.bid_price  %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% end %>
+<% end %>
