@@ -98,8 +98,8 @@ test:
 production:
   <<: *default
   database: ENV['DATABASE_URL']
-  username: ENV['DATABASE_USERNAME']
-  password: ENV['DATABASE_PASSWORDs']
+  username: ENV['CLEARDB_DATABASE_USERNAME']
+  password: ENV['CLEARDB_DATABASE_PASSWORDs']
 
 
 default: &default
