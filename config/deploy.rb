@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.10.2"
+# lock "~> 3.10.2"
 
 set :application, "18.188.186.148"
 set :repo_url, "git@github.com:manish4uanand/AddSpaceProvider.git"
